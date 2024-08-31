@@ -1,0 +1,12 @@
+#perform HiveQL on EMR cluster CLI
+
+
+# Get EMR Cluster ID and export to the Environment.
+export ID=$(aws emr list-clusters | jq '.Clusters[0].Id' | tr -d '"')
+
+# Use the ID to get the PublicDNS name of the EMR Cluster 
+# and export to the Environment.
+export HOST=$(aws emr describe-cluster --cluster-id $ID | jq '.Cluster.MasterPublicDnsName' | tr -d '"')
+
+# SSH to the EMR cluster
+ssh -i ~/EMRKey-lab.pem hadoop@$HOST
